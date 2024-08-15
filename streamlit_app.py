@@ -2,7 +2,6 @@ import gdown
 import os
 import streamlit as st
 import numpy as np
-import cv2
 import tensorflow as tf
 from PIL import Image
 from tensorflow.keras.models import load_model
@@ -44,25 +43,35 @@ def add_black_background(image):
     return image
 
 # Define a function to preprocess the image and make predictions
-def predict_image(image):
-    # Define the target size (make sure it matches your model's input size)
-    target_size = (224, 224)
+def predict_image(img):
+    # # Define the target size (make sure it matches your model's input size)
+    # target_size = (224, 224)
 
-    # Convert the PIL image to a NumPy array
-    image = np.array(image)
+    # # Convert the PIL image to a NumPy array
+    # image = np.array(image)
 
-    # Resize the image
-    image_resized = cv2.resize(image, target_size)
+    # # Resize the image
+    # image_resized = cv2.resize(image, target_size)
 
-    # Normalize the image
-    image_normalized = image_resized / 255.0
+    # # Normalize the image
+    # image_normalized = image_resized / 255.0
 
-    # Expand dimensions to match the model's expected input
-    image_expanded = np.expand_dims(image_normalized, axis=0)
+    # # Expand dimensions to match the model's expected input
+    # image_expanded = np.expand_dims(image_normalized, axis=0)
 
-    # Make prediction
-    predictions = model.predict(image_expanded)
-    predicted_class_idx = np.argmax(predictions[0])
+    # # Make prediction
+    # predictions = model.predict(image_expanded)
+    # predicted_class_idx = np.argmax(predictions[0])
+    img = img.resize((224, 224))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.0
+
+    # Get predictions
+    predictions = model.predict(img_array)
+
+    # Get the index of the class with the highest probability
+    predicted_class_index = np.argmax(predictions[0])
 
     # Define your class labels (replace this with your own labels)
     labels = [
@@ -135,9 +144,9 @@ def predict_image(image):
     ]
 
     # Get the predicted class label
-    predicted_class = labels[predicted_class_idx]
+    predicted_class = labels[predicted_class_index]
 
-    return predicted_class, image
+    return predicted_class, img
 
 
 # Streamlit app
