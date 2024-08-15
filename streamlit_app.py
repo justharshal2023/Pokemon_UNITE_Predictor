@@ -63,8 +63,9 @@ def predict_image(img):
     # predictions = model.predict(image_expanded)
     # predicted_class_idx = np.argmax(predictions[0])
     img = img.resize((224, 224))
-    img_array = image.img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0)
+    # img_array = image.img_to_array(img)
+    # img_array = np.expand_dims(img_array, axis=0)
+    img_array = np.array(img)
     img_array /= 255.0
 
     # Get predictions
