@@ -1,7 +1,8 @@
-streamlit
+streamlit==1.8.0 
 tensorflow
 opencv-python
 numpy
 Pillow
 opencv-python-headless
 matplotlib
+tf-keras
