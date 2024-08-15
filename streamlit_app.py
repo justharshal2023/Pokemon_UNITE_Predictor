@@ -1,3 +1,4 @@
+import gdown
 import streamlit as st
 import numpy as np
 import cv2
@@ -16,6 +17,7 @@ url = f"https://drive.google.com/uc?id={file_id}"
 # Output path to save the model
 output = "Unite_ClassifierV2.h5"  # Replace with your model file name
 
+gdown.download(url, output, quiet=False)
 
 def load_model():
     # Replace with code to load your actual model
