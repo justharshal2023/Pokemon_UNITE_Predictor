@@ -92,7 +92,7 @@ if uploaded_file is not None:
         predicted_class, img_array = predict_image(image)
 
     # Plot the image with predicted class as the title
-    st.image(img_array, caption=f"Predicted Class: {predicted_class}", use_column_width=True)
+    #st.image(img_array,caption=f"Predicted Class: {predicted_class}", use_column_width=True)
     st.write(f"Predicted Class: {predicted_class}")
 
 elif url_input:
@@ -109,7 +109,7 @@ elif url_input:
             predicted_class, img_array = predict_image(image)
 
         # Plot the image with predicted class as the title
-        st.image(img_array, caption=f"Predicted Class: {predicted_class}", use_column_width=True)
+        #st.image(img_array, caption=f"Predicted Class: {predicted_class}", use_column_width=True)
         st.write(f"Predicted Class: {predicted_class}")
 
     except Exception as e:
