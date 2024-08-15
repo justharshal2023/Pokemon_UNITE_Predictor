@@ -6,3 +6,4 @@ Pillow
 opencv-python-headless
 matplotlib
 tf-keras
+gdown
