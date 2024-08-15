@@ -136,7 +136,7 @@ st.title("Pokémon Identifier")
 
 # Image uploader
 uploaded_file = st.file_uploader(
-    "Choose an image of a single UNITE pokemon to identify...", type="jpg"
+    "Choose an image of a single UNITE pokemon to identify...", type=["jpg", "png"]
 )
 
 # URL input
