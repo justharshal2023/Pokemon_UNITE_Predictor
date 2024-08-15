@@ -93,7 +93,7 @@ if uploaded_file is not None:
 
     # Plot the image with predicted class as the title
     #st.image(img_array,caption=f"Predicted Class: {predicted_class}", use_column_width=True)
-    st.write(f"Predicted Class: {predicted_class}")
+    st.write(f"Predicted Pokemon: {predicted_class}")
 
 elif url_input:
     try:
@@ -110,7 +110,7 @@ elif url_input:
 
         # Plot the image with predicted class as the title
         #st.image(img_array, caption=f"Predicted Class: {predicted_class}", use_column_width=True)
-        st.write(f"Predicted Class: {predicted_class}")
+        st.write(f"Predicted Pokemon: {predicted_class}")
 
     except Exception as e:
         st.error(f"Error loading image: {e}")
