@@ -29,17 +29,25 @@ model.summary()
 def predict_image(img):
     target_size = (224, 224)
     
-    # Convert the PIL image to a NumPy array
-    img = img.convert('RGB')  # Ensure the image is in RGB mode
+    # Convert the PIL image to RGB (to handle PNG with transparency)
+    img = img.convert('RGB')
+    
+    # Resize the image
     img = img.resize(target_size)
-    img_array = np.array(img)
-    img_array = np.expand_dims(img_array, axis=0)  # Expand dimensions to match model input
+    
+    # Convert the PIL image to a NumPy array
+    img_array = np.array(img, dtype=np.float32)  # Ensure correct data type
+    
+    # Normalize the image array
     img_array /= 255.0
-
+    
+    # Expand dimensions to match model input
+    img_array = np.expand_dims(img_array, axis=0)
+    
     # Get predictions
     predictions = model.predict(img_array)
     predicted_class_index = np.argmax(predictions[0])
-
+    
     # Define your class labels
     labels = [
         "Absol", "Aegislash", "Alolan Ninetales", "Azumarill", "Blastoise",
@@ -57,11 +65,12 @@ def predict_image(img):
         "Urshifu", "Venusaur", "Wigglytuff", "Zacian", "Zeraora",
         "Zoroark",
     ]
-
+    
     # Get the predicted class label
     predicted_class = labels[predicted_class_index]
 
     return predicted_class, img
+
 
 # Streamlit app
 st.title("Pokémon Identifier")
