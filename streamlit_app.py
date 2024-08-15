@@ -17,15 +17,20 @@ url = f"https://drive.google.com/uc?id={file_id}"
 # Output path to save the model
 output = "Unite_ClassifierV2.h5"  # Replace with your model file name
 
-gdown.download(url, output, quiet=False)
+# Download the file if it doesn't exist
+if not os.path.exists(output):
+    gdown.download(url, output, quiet=False)
 
+# Load your model
 def load_model():
     # Replace with code to load your actual model
     loaded_model = tf.keras.models.load_model(output)
     return loaded_model
 
-
 model = load_model()
+
+# Print model summary to verify
+model.summary()
 
 
 # Define a function to preprocess the image and make predictions
