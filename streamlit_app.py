@@ -33,13 +33,12 @@ model = load_model()
 # Print model summary to verify
 model.summary()
 
-# Theme selection
-theme = st.sidebar.selectbox("Select Theme", ["Light", "Dark"])
-
-def add_background(image, theme):
+#add black bg to pngs
+def add_black_background(image):
     if image.mode == 'RGBA':
-        # Create a new image with a solid background color
-        background = Image.new('RGB', image.size, (255, 255, 255) if theme == 'Light' else (0, 0, 0))
+        # Create a new image with a black background
+        background = Image.new('RGB', image.size, (0, 0, 0))
+        # Paste the PNG image on top of the black background
         background.paste(image, (0, 0), image)
         return background
     return image
@@ -155,7 +154,7 @@ url_input = st.text_input("Or enter the URL of an image")
 if uploaded_file is not None:
     # Convert the uploaded file to an image
     image = Image.open(uploaded_file)
-    image = add_background(image, theme)
+    image = add_black_background(image)
     # Display the uploaded image
     st.image(image, caption="Uploaded Image.", use_column_width=True)
 
@@ -174,7 +173,7 @@ elif url_input:
         # Download the image from the URL
         response = requests.get(url_input)
         image = Image.open(BytesIO(response.content))
-        image = add_background(image, theme)
+        image = add_black_background(image)
 
         # Display the image from the URL
         st.image(image, caption="Image from URL.", use_column_width=True)
