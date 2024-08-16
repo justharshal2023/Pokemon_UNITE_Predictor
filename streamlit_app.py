@@ -6,6 +6,7 @@ import tensorflow as tf
 from PIL import Image
 import requests
 from io import BytesIO
+import matplotlib.pyplot as plt
 
 # Load your trained model
 file_id = "1mrlCErSUBZM66DItDVKtRDyuyX_o-J7e"  # Replace with your file ID
