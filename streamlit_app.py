@@ -191,7 +191,7 @@ elif option == "Identify multiple Pokémon from a combined image":
         fig, axes = plt.subplots(2, 5, figsize=(15, 6))
         fig.suptitle('Team A', fontsize=16)  # Add a heading for Team A
         fig.text(0.5, 0.01, 'Team B', ha='center', fontsize=16)  # Add a footer for Team B
-        fig.tight_layout(pad=3.0, rect=[0, 0.03, 1, 0.95])  # Adjust the layout to accommodate the title and footer
+        fig.tight_layout(pad=2.0, rect=[0, 0.03, 1, 0.95])  # Adjust the layout to accommodate the title and footer
         # fig.tight_layout(pad=3.0)
 
         for i in range(5):
