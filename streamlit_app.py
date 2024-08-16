@@ -114,3 +114,86 @@ elif url_input:
 
     except Exception as e:
         st.error(f"Error loading image: {e}")
+
+
+#Break
+
+# Streamlit app title
+st.title("Pokémon Image Cropper and Predictor")
+
+# Allow user to upload an image
+uploaded_file2 = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+
+if uploaded_file2 is not None:
+    # Load the image
+    image = Image.open(uploaded_file2)
+
+    # Convert the image to RGB if it's not already in that format
+    image_rgb = image.convert("RGB")
+
+    # Display the original image
+    st.image(image_rgb, caption="Original Image", use_column_width=True)
+
+    # Dimensions of the original image
+    width, height = image.size
+
+    # Define the margins to be cut off from left and right
+    margin_left = int(width * 0.17)
+    margin_right = int(width * 0.17)
+
+    # Crop the image to remove the empty parts on the left and right
+    cropped_image = image_rgb.crop((margin_left, 0, width - margin_right, height))
+
+    # Get the new dimensions after cropping
+    new_width, new_height = cropped_image.size
+
+    # Define the coordinates for each Pokémon's bounding box within the cropped image
+    pokemon_coords = [
+        # Team A (Top row)
+        (0, 0, new_width // 5, new_height // 2),
+        (new_width // 5, 0, 2 * new_width // 5, new_height // 2),
+        (2 * new_width // 5, 0, 3 * new_width // 5, new_height // 2),
+        (3 * new_width // 5, 0, 4 * new_width // 5, new_height // 2),
+        (4 * new_width // 5, 0, new_width, new_height // 2),
+
+        # Team B (Bottom row)
+        (0, new_height // 2, new_width // 5, new_height),
+        (new_width // 5, new_height // 2, 2 * new_width // 5, new_height),
+        (2 * new_width // 5, new_height // 2, 3 * new_width // 5, new_height),
+        (3 * new_width // 5, new_height // 2, 4 * new_width // 5, new_height),
+        (4 * new_width // 5, new_height // 2, new_width, new_height)
+    ]
+
+    # Dictionary to store Pokémon images
+    pokemon_images = {}
+
+    # Crop and store each Pokémon image with additional cropping
+    for i, (x1, y1, x2, y2) in enumerate(pokemon_coords):
+        # Calculate the additional cropping margins
+        add_margin_x = int((x2 - x1) * 0.07)  # 7% from left and right
+        add_margin_y_top = int((y2 - y1) * 0.12)  # 12% from the top
+        add_margin_y_bottom = int((y2 - y1) * 0.30)  # 30% from the bottom
+
+        # Adjust the coordinates with the additional margins
+        x1_new = max(x1 + add_margin_x, 0)
+        y1_new = max(y1 + add_margin_y_top, 0)
+        x2_new = min(x2 - add_margin_x, new_width)
+        y2_new = min(y2 - add_margin_y_bottom, new_height)
+
+        # Crop the image
+        pokemon_image = cropped_image.crop((x1_new, y1_new, x2_new, y2_new))
+
+        # Store the image in the dictionary
+        pokemon_images[f'pokemon_{i + 1}'] = pokemon_image
+
+    # Display all cropped Pokémon images in Streamlit
+    for i in range(1, 11):
+        st.image(pokemon_images[f'pokemon_{i}'], caption=f'Pokemon {i}', use_column_width=True)
+
+    # Assuming a predict_image function is available that takes an image and returns a predicted class
+    # predicted_classes = [predict_image(pokemon_images[f'pokemon_{i}']) for i in range(1, 11)]
+
+    # You can now use `predicted_classes` along with `pokemon_images` as needed
+else:
+    st.write("Please upload an image to start the process.")
+
