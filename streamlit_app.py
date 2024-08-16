@@ -165,6 +165,7 @@ elif option == "Identify multiple Pokémon from a combined image":
 
     # Dictionary to store Pokémon images
         pokemon_images = {}
+        predicted_class = {}
 
     # Crop and store each Pokémon image with additional cropping
         for i, (x1, y1, x2, y2) in enumerate(pokemon_coords):
@@ -184,6 +185,7 @@ elif option == "Identify multiple Pokémon from a combined image":
 
         # Store the image in the dictionary
             pokemon_images[f'pokemon_{i + 1}'] = pokemon_image
+            predicted_calss[f'pokemon_{i + 1}'] = predict_image(pokemon_image)
 
     # Plot the Pokémon images
         fig, axes = plt.subplots(2, 5, figsize=(15, 6))
@@ -191,15 +193,15 @@ elif option == "Identify multiple Pokémon from a combined image":
 
         for i in range(5):
             axes[0, i].imshow(pokemon_images[f'pokemon_{i + 1}'])
-            axes[0, i].set_title(f'Pokemon {i + 1}')
+            axes[0, i].set_title(predicted_class[f'pokemon_{i + 1}'])
             axes[0, i].axis('off')
 
         for i in range(5):
             axes[1, i].imshow(pokemon_images[f'pokemon_{i + 6}'])
-            axes[1, i].set_title(f'Pokemon {i + 6}')
+            axes[1, i].set_title(predicted_class[f'pokemon_{i + 6}']))
             axes[1, i].axis('off')
 
         st.pyplot(fig)
 
     else:
-        st.write("Please upload an image to start the process.")
+        st.write("Please upload an SS of UNITE Matchmaking to start the process.")
