@@ -198,7 +198,7 @@ elif option == "Identify multiple Pokémon from a combined image":
 
         for i in range(5):
             axes[1, i].imshow(pokemon_images[f'pokemon_{i + 6}'])
-            axes[1, i].set_title(predicted_class[f'pokemon_{i + 6}']))
+            axes[1, i].set_title(predicted_class[f'pokemon_{i + 6}'])
             axes[1, i].axis('off')
 
         st.pyplot(fig)
