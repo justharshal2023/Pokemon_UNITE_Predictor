@@ -118,81 +118,87 @@ if option == "Identify a single Pokémon":
             st.error(f"Error loading image: {e}")
 
 elif option == "Identify multiple Pokémon from a combined image":
-    # Combined image processing for multiple Pokémon
-    uploaded_file2 = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-    if uploaded_file2 is not None:
-        # Load the image
-        image = Image.open(uploaded_file2)
+# File uploader
+uploaded_file2 = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-        # Convert the image to RGB if it's not already in that format
-        image_rgb = image.convert("RGB")
+if uploaded_file2 is not None:
+    # Load the image
+    image = Image.open(uploaded_file2)
 
-        # Display the original image
-        st.image(image_rgb, caption="Original Image", use_column_width=True)
+    # Convert the image to RGB if it's not already in that format
+    image_rgb = image.convert("RGB")
 
-        # Dimensions of the original image
-        width, height = image.size
+    # Display the original image
+    st.image(image_rgb, caption="Original Image", use_column_width=True)
 
-        # Define the margins to be cut off from left and right
-        margin_left = int(width * 0.17)
-        margin_right = int(width * 0.17)
+    # Dimensions of the original image
+    width, height = image.size
 
-        # Crop the image to remove the empty parts on the left and right
-        cropped_image = image_rgb.crop((margin_left, 0, width - margin_right, height))
+    # Define the margins to be cut off from left and right
+    margin_left = int(width * 0.17)
+    margin_right = int(width * 0.17)
 
-        # Get the new dimensions after cropping
-        new_width, new_height = cropped_image.size
+    # Crop the image to remove the empty parts on the left and right
+    cropped_image = image_rgb.crop((margin_left, 0, width - margin_right, height))
 
-        # Define the coordinates for each Pokémon's bounding box within the cropped image
-        pokemon_coords = [
-            # Team A (Top row)
-            (0, 0, new_width // 5, new_height // 2),
-            (new_width // 5, 0, 2 * new_width // 5, new_height // 2),
-            (2 * new_width // 5, 0, 3 * new_width // 5, new_height // 2),
-            (3 * new_width // 5, 0, 4 * new_width // 5, new_height // 2),
-            (4 * new_width // 5, 0, new_width, new_height // 2),
+    # Get the new dimensions after cropping
+    new_width, new_height = cropped_image.size
 
-            # Team B (Bottom row)
-            (0, new_height // 2, new_width // 5, new_height),
-            (new_width // 5, new_height // 2, 2 * new_width // 5, new_height),
-            (2 * new_width // 5, new_height // 2, 3 * new_width // 5, new_height),
-            (3 * new_width // 5, new_height // 2, 4 * new_width // 5, new_height),
-            (4 * new_width // 5, new_height // 2, new_width, new_height)
-        ]
+    # Define the coordinates for each Pokémon's bounding box within the cropped image
+    pokemon_coords = [
+        # Team A (Top row)
+        (0, 0, new_width // 5, new_height // 2),
+        (new_width // 5, 0, 2 * new_width // 5, new_height // 2),
+        (2 * new_width // 5, 0, 3 * new_width // 5, new_height // 2),
+        (3 * new_width // 5, 0, 4 * new_width // 5, new_height // 2),
+        (4 * new_width // 5, 0, new_width, new_height // 2),
 
-        # Dictionary to store Pokémon images
-        pokemon_images = {}
+        # Team B (Bottom row)
+        (0, new_height // 2, new_width // 5, new_height),
+        (new_width // 5, new_height // 2, 2 * new_width // 5, new_height),
+        (2 * new_width // 5, new_height // 2, 3 * new_width // 5, new_height),
+        (3 * new_width // 5, new_height // 2, 4 * new_width // 5, new_height),
+        (4 * new_width // 5, new_height // 2, new_width, new_height)
+    ]
 
-        # Crop and store each Pokémon image with additional cropping
-        for i, (x1, y1, x2, y2) in enumerate(pokemon_coords):
-            # Calculate the additional cropping margins
-            add_margin_x = int((x2 - x1) * 0.07)  # 7% from left and right
-            add_margin_y_top = int((y2 - y1) * 0.12)  # 12% from the top
-            add_margin_y_bottom = int((y2 - y1) * 0.30)  # 30% from the bottom
+    # Dictionary to store Pokémon images
+    pokemon_images = {}
 
-            # Adjust the coordinates with the additional margins
-            x1_new = max(x1 + add_margin_x, 0)
-            y1_new = max(y1 + add_margin_y_top, 0)
-            x2_new = min(x2 - add_margin_x, new_width)
-            y2_new = min(y2 - add_margin_y_bottom, new_height)
+    # Crop and store each Pokémon image with additional cropping
+    for i, (x1, y1, x2, y2) in enumerate(pokemon_coords):
+        # Calculate the additional cropping margins
+        add_margin_x = int((x2 - x1) * 0.07)  # 7% from left and right
+        add_margin_y_top = int((y2 - y1) * 0.12)  # 12% from the top
+        add_margin_y_bottom = int((y2 - y1) * 0.30)  # 30% from the bottom
 
-            # Crop the image
-            pokemon_image = cropped_image.crop((x1_new, y1_new, x2_new, y2_new))
+        # Adjust the coordinates with the additional margins
+        x1_new = max(x1 + add_margin_x, 0)
+        y1_new = max(y1 + add_margin_y_top, 0)
+        x2_new = min(x2 - add_margin_x, new_width)
+        y2_new = min(y2 - add_margin_y_bottom, new_height)
 
-            # Store the image in the dictionary
-            pokemon_images[f'pokemon_{i + 1}'] = pokemon_image
+        # Crop the image
+        pokemon_image = cropped_image.crop((x1_new, y1_new, x2_new, y2_new))
 
-        # Display all cropped Pokémon images in Streamlit
-        for i in range(1, 11):
-            st.image(pokemon_images[f'pokemon_{i}'], caption=f'Pokemon {i}', use_column_width=True)
+        # Store the image in the dictionary
+        pokemon_images[f'pokemon_{i + 1}'] = pokemon_image
 
-        # Assuming a predict_image function is available that takes an image and returns a predicted class
-        # You can now use `predicted_classes` along with `pokemon_images` as needed
-        #predicted_classes = [predict_image(pokemon_images[f'pokemon_{i}']) for i in range(1, 11)]
-        
-        # Example to display predictions (if needed)
-        #for
-    else:
-        st.write("Please upload an image to start the process.")
+    # Plot the Pokémon images
+    fig, axes = plt.subplots(2, 5, figsize=(15, 6))
+    fig.tight_layout(pad=3.0)
 
+    for i in range(5):
+        axes[0, i].imshow(pokemon_images[f'pokemon_{i + 1}'])
+        axes[0, i].set_title(f'Pokemon {i + 1}')
+        axes[0, i].axis('off')
+
+    for i in range(5):
+        axes[1, i].imshow(pokemon_images[f'pokemon_{i + 6}'])
+        axes[1, i].set_title(f'Pokemon {i + 6}')
+        axes[1, i].axis('off')
+
+    st.pyplot(fig)
+
+else:
+    st.write("Please upload an image to start the process.")
