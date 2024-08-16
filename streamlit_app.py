@@ -185,7 +185,7 @@ elif option == "Identify multiple Pokémon from a combined image":
 
         # Store the image in the dictionary
             pokemon_images[f'pokemon_{i + 1}'] = pokemon_image
-            predicted_calss[f'pokemon_{i + 1}'] = predict_image(pokemon_image)
+            predicted_class[f'pokemon_{i + 1}'] = predict_image(pokemon_image)
 
     # Plot the Pokémon images
         fig, axes = plt.subplots(2, 5, figsize=(15, 6))
